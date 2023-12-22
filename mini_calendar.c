@@ -180,11 +180,9 @@ void calendar() {
 
     printf("Enter Year:  ");
     scanf("%d", &year);
-    back2menu(year);
 
     printf("Enter Month:  ");
     scanf("%d", &month);
-    back2menu(month);
     system("cls");
 
     print_month_name(month);
@@ -239,7 +237,6 @@ void conversion() {
     shamsi_to_miladi(year, month, day);
 }
 
-void back2menu(int input);
 
 
 
@@ -269,16 +266,6 @@ void menu() {
         menu();
     }
     
-
-    
-
-}
-void back2menu(int input) {
-    if (input == 0) {
-        system("cls");
-        printf("Back to menu!\n-----------------------------\n");
-        menu();
-    }
 }
     
 int main() {
