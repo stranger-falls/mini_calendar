@@ -147,45 +147,53 @@ void age_by_ymd(int current_year, int current_month, int today, int born_year, i
     printf("%d Years & %d Monthes & %d Days.\n", years, monthes, days);
 }
 
-void shamsi_to_miladi(int year, int month, int day) {  // !! has to be cleaned !!
-    int origin_year = 1206, days_count, year_length, miladi_year = 1827, month_name, month_len, monthes_count;
-    int miladi_month_len[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int year_jump(int year, int mode) { // to be used in shamsi convert mode=1 for miladi and mode=2 for gamari
+    if (mode == 1) {
+        return is_leap(year);
+    } else {
+        return is_kabise(year, 1);
+    }
+}
+
+void shamsi_to_convert(int year, int month, int day, int mode) {  // !! has to be cleaned !! mode=1 for miladi and mode=2 for gamari
+    int origin_year = 1206, days_count, year_length, convert_year = 1827, month_name, month_len, monthes_count;
+    int additional_days = 79, base_year_length = 365;
+    int convert_month_len[2][12] = {{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}, {30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29}};
+
+    if (mode == 2) {
+        convert_year = 1242;
+        additional_days = 228;
+        base_year_length = 354;
+    }
 
     days_count = goto_month_beginning(year, month, origin_year);
     days_count += day;
-    days_count += 79; // 1206/01/01 = 1827/03/22
+    days_count += additional_days; // 1206/01/01 = 1827/03/22  and  1206/01/01 = 1242/08/23
     
-    year_length = 365 + is_leap(miladi_year);
+    year_length = base_year_length + year_jump(convert_year, mode);
     while (days_count > year_length) {
         days_count -= year_length;
-        year_length = 365 + is_leap(miladi_year);
-        miladi_year += 1;
+        year_length = base_year_length + year_jump(convert_year, mode);
+        convert_year += 1;
     }
 
     month_name = 0;
-    month_len = miladi_month_len[month_name]; 
+    month_len = convert_month_len[mode - 1][month_name]; 
     monthes_count = 1;
     while (days_count > month_len) {
         days_count -= month_len;
         month_name += 1;
-        if (month_name == 1 && is_leap(miladi_year) == 1) {
+        if (month_name == 1 && year_jump(convert_year, mode) == 1) {
             month_len = 29;
         } else {
-            month_len = miladi_month_len[month_name];
+            month_len = convert_month_len[mode - 1][month_name];
         }
         monthes_count += 1;
     }
-    if (is_leap(miladi_year - 1) == 1) {
+    if (year_jump(convert_year - 1, mode) == 1) {
         days_count -= 1;
     }
-    printf("%d %d %d\n", miladi_year, monthes_count, days_count);
-}
-
-void shamsi_to_gamari(int year) {
-    int gamari_year;
-    gamari_year = year * 11 / 354 + year; // formula found on the web
-    printf("%d", gamari_year);
-
+    printf("%d %d %d\n", convert_year, monthes_count, days_count);
 }
 
 void calendar() {
@@ -228,6 +236,7 @@ void age() {
     int current_year, current_month, today, born_year, born_month, born_day;
     int age_days;
 
+    printf("[0] Back to Menu\n-----------------------------\n");
     printf("Please enter today's date in format y m d (example: 1401 12 17): ");
     scanf("%d", &current_year);
     if (current_year == 0) return back_to_menu();
@@ -254,14 +263,38 @@ void age() {
     which_day_born(born_year, born_month, born_day);
 
     printf("-----------------------------\n");
-    printf("[0] Back to Menu\n-----------------------------\n");
     return age();
     
 }
 
-void conversion() {
+void conversion(int mode);
+
+void conversion_menu() {
+    int option;
+
+    printf("[1] Shamsi to Miladi\n[2] Shamsi to Gamari\n");
+    printf("-----------------------------\nSelect Option: ");
+    scanf("%d", &option);
+
+    if (option == 0) {
+        system("cls");
+        return back_to_menu();
+
+    } else if (option == 1 || option == 2) {
+        system("cls");
+        return conversion(option);
+
+    } else {
+        system("cls");
+        printf("Invalid Input!\n-----------------------------\n");
+        return conversion_menu();
+    }
+}
+
+void conversion(int mode) {
     int year, month, day;
 
+    printf("[0] Back to Menu\n-----------------------------\n");
     printf("Please enter date in format y m d (example: 1369 7 19): ");
     
     scanf("%d", &year);
@@ -270,14 +303,15 @@ void conversion() {
     if (month == 0) return back_to_menu();
     scanf("%d", &day);
     if (day == 0) return back_to_menu();
+
     system("cls");
 
     printf("%d %d %d --> ", year, month, day);
-    shamsi_to_miladi(year, month, day);
+    shamsi_to_convert(year, month, day, mode);
 
     printf("-----------------------------\n");
     printf("[0] Back to Menu\n-----------------------------\n");
-    return conversion();
+    return conversion_menu();
 }
 
 void menu() {
@@ -298,13 +332,12 @@ void menu() {
         age();
     } else if (choice == 3) {
         system("cls");
-        conversion();
+        conversion_menu();
     } else {
         system("cls");
         printf("Invalid Input!\n");
         menu();
     }
-    
 }
     
 int main() {
