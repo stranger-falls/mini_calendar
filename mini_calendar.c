@@ -176,13 +176,22 @@ void shamsi_to_gamari(int year) {
 void calendar() {
     int year, month, start_of_month, day_of_month = 1, i, origin_year = 1206;
 
-    
-
     printf("Enter Year:  ");
     scanf("%d", &year);
+    if (year == 0) {
+        system("cls");
+        printf("Back to menu!\n-----------------------------\n");
+        return menu();
+    }
 
     printf("Enter Month:  ");
     scanf("%d", &month);
+    if (month == 0) {
+        system("cls");
+        printf("Back to menu!\n-----------------------------\n");
+        return menu();
+    }
+
     system("cls");
 
     print_month_name(month);
@@ -203,8 +212,7 @@ void calendar() {
         }
         day_of_month += 1;
     }
-    printf("\n");
-    printf("-----------------------------\n");
+    printf("\n-----------------------------\n");
     printf("[0] Back to Menu\n-----------------------------\n");
     calendar();
 }
@@ -237,13 +245,8 @@ void conversion() {
     shamsi_to_miladi(year, month, day);
 }
 
-
-
-
 void menu() {
     int choice;
-
-
 
     printf("[0] Quit\n[1] Calendar\n[2] Age\n[3] Conversion\n");
     printf("-----------------------------\nSelect Option:  ");
@@ -271,6 +274,4 @@ void menu() {
 int main() {
     system("cls");
     menu();
-
-    
 }
