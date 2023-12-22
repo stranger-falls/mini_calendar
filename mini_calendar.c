@@ -10,6 +10,14 @@
 #define TEXT_BOLD       "\x1b[1m"
 #define RESET_ALL       "\x1b[0m"
 
+void menu();
+
+void back_to_menu() {
+    system("cls");
+    printf("Back to menu!\n-----------------------------\n");
+    return menu();
+}
+
 int is_kabise(int year) { // determine if a year is kabise (1) or not (0)
     int i;
     int kabise_determiner[8] = {1, 5, 9, 13, 17, 22, 26, 30};
@@ -178,19 +186,11 @@ void calendar() {
 
     printf("Enter Year:  ");
     scanf("%d", &year);
-    if (year == 0) {
-        system("cls");
-        printf("Back to menu!\n-----------------------------\n");
-        return menu();
-    }
-
+    if (year == 0) return back_to_menu();
+    
     printf("Enter Month:  ");
     scanf("%d", &month);
-    if (month == 0) {
-        system("cls");
-        printf("Back to menu!\n-----------------------------\n");
-        return menu();
-    }
+    if (month == 0) return back_to_menu();
 
     system("cls");
 
