@@ -18,21 +18,28 @@ void back_to_menu() {
     return menu();
 }
 
-int is_kabise(int year) { // determine if a year is kabise (1) or not (0)
-    int i;
-    int kabise_determiner[8] = {1, 5, 9, 13, 17, 22, 26, 30};
-    for (i = 0; i < 8; i++) {
-        if (year % 33 == kabise_determiner[i]) {
+int is_kabise(int year, int mode) { // determine if a year is kabise (1) or not (0) and mode=0 for shamsi and mode=1 for gamari
+    int i, n, divider;
+    int kabise_determiner[2][11] = {{1, 5, 9, 13, 17, 22, 26, 30, 0, 0, 0,}, {2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29}};
+    if (mode == 0) {
+        n = 8;
+        divider = 33;
+    } else {
+        n = 11;
+        divider = 30;
+    }
+    for (i = 0; i < n; i++) {
+        if (year % divider == kabise_determiner[mode][i]) {
             return 1;
         }
     }
     return 0;
 }
 
-int count_kabise(int year, int origin_year) { // count kabise years up to given year (current year not included)
+int count_kabise(int year, int origin_year, int mode) { // count kabise years up to given year (current year not included)
     int kabise_count = 0, y;
     for (y = origin_year; y < year; y++) {
-        kabise_count += is_kabise(y);
+        kabise_count += is_kabise(y, mode);
     }
     return kabise_count;
 }
@@ -61,10 +68,10 @@ int count_leap(int year) { // count leap years up to given year (current year no
 
 int count_days(int year, int month, int origin_year) { // count days until the last day of the given month
     int days_count;
-    days_count = (year - origin_year) * 365 + count_kabise(year, origin_year);
+    days_count = (year - origin_year) * 365 + count_kabise(year, origin_year, 0);
     days_count += month * 31;
     days_count -= ((month - 6) * (month / 7)); // adjusting for monthes with 30 days (month > 6)
-    if (month == 12 && is_kabise(year) == 0) {
+    if (month == 12 && is_kabise(year, 0) == 0) {
         days_count -= 1;
     }
     return days_count;
@@ -73,7 +80,7 @@ int count_days(int year, int month, int origin_year) { // count days until the l
 int get_month_length(int year, int month) {
     int month_length = 31;
     month_length -= month / 7; // == if (month > 6) ==> month -= 1;  
-    if (month == 12 && is_kabise(year) == 0) {
+    if (month == 12 && is_kabise(year, 0) == 0) {
         month_length -=1;
     }
     return month_length;
@@ -134,7 +141,7 @@ void age_by_ymd(int current_year, int current_month, int today, int born_year, i
     age_days = age_by_days(current_year, current_month, today, born_year, born_month, born_day);
     years = age_days / 365;
     age_days %= 365;
-    age_days -= count_kabise(current_year, born_year);
+    age_days -= count_kabise(current_year, born_year, 0);
     monthes = age_days / 31;
     days = age_days % 31 + 2;
     printf("%d Years & %d Monthes & %d Days.\n", years, monthes, days);
