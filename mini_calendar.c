@@ -137,7 +137,7 @@ void age_by_ymd(int current_year, int current_month, int today, int born_year, i
     age_days -= count_kabise(current_year, born_year);
     monthes = age_days / 31;
     days = age_days % 31 + 2;
-    printf("You've been out of your mother's stomach for %d Years & %d Monthes & %d Days.\n", years, monthes, days);
+    printf("%d Years & %d Monthes & %d Days.\n", years, monthes, days);
 }
 
 void shamsi_to_miladi(int year, int month, int day) {  // !! has to be cleaned !!
@@ -214,7 +214,7 @@ void calendar() {
     }
     printf("\n-----------------------------\n");
     printf("[0] Back to Menu\n-----------------------------\n");
-    calendar();
+    return calendar();
 }
 
 void age() {
@@ -223,13 +223,21 @@ void age() {
 
     printf("Please enter today's date in format y m d (example: 1401 12 17): ");
     scanf("%d", &current_year);
+    if (current_year == 0) return back_to_menu();
     scanf("%d", &current_month);
+    if (current_month == 0) return back_to_menu();
     scanf("%d", &today);
+    if (today == 0) return back_to_menu();
 
     printf("Please enter birthdate in format y m d (example: 1375 4 22): ");
     scanf("%d", &born_year);
+    if (born_year== 0) return back_to_menu();
     scanf("%d", &born_month);
+    if (born_month == 0) return back_to_menu();
     scanf("%d", &born_day);
+    if (born_day == 0) return back_to_menu();
+
+    system("cls");
 
     age_by_ymd(current_year, current_month, today, born_year, born_month, born_day);
 
@@ -238,6 +246,9 @@ void age() {
 
     which_day_born(born_year, born_month, born_day);
 
+    printf("-----------------------------\n");
+    printf("[0] Back to Menu\n-----------------------------\n");
+    return age();
     
 }
 void conversion() {
