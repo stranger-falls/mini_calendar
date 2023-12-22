@@ -251,9 +251,26 @@ void age() {
     return age();
     
 }
+
 void conversion() {
-    int year = 1452, month = 4, day = 5;
+    int year, month, day;
+
+    printf("Please enter date in format y m d (example: 1369 7 19): ");
+    
+    scanf("%d", &year);
+    if (year == 0) return back_to_menu();
+    scanf("%d", &month);
+    if (month == 0) return back_to_menu();
+    scanf("%d", &day);
+    if (day == 0) return back_to_menu();
+    system("cls");
+
+    printf("%d %d %d --> ", year, month, day);
     shamsi_to_miladi(year, month, day);
+
+    printf("-----------------------------\n");
+    printf("[0] Back to Menu\n-----------------------------\n");
+    return conversion();
 }
 
 void menu() {
@@ -276,7 +293,8 @@ void menu() {
         system("cls");
         conversion();
     } else {
-        printf("Invalid Input!");
+        system("cls");
+        printf("Invalid Input!\n");
         menu();
     }
     
