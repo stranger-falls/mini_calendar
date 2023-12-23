@@ -199,6 +199,7 @@ void shamsi_to_convert(int year, int month, int day, int mode) {  // !! has to b
 void calendar() {
     int year, month, start_of_month, day_of_month = 1, i, origin_year = 1206;
 
+    printf("[0] Back to Menu\n--------------------------\n");
     printf("Enter Year:  ");
     scanf("%d", &year);
     if (year == 0) return back_to_menu();
@@ -227,8 +228,7 @@ void calendar() {
         }
         day_of_month += 1;
     }
-    printf("\n-----------------------------\n");
-    printf("[0] Back to Menu\n-----------------------------\n");
+    printf("\n--------------------------\n");
     return calendar();
 }
 
