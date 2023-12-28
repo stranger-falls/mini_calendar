@@ -10,13 +10,6 @@
 #define TEXT_BOLD       "\x1b[1m"
 #define RESET_ALL       "\x1b[0m"
 
-void menu();
-
-void back_to_menu() {
-    system("cls");
-    printf("Back to menu!\n-----------------------------\n");
-    return menu();
-}
 
 int is_kabise(int year, int mode) { // determine if a year is kabise (1) or not (0) and mode=0 for shamsi and mode=1 for gamari
     int i, n, divider;
@@ -143,11 +136,11 @@ void age_by_ymd(int current_year, int current_month, int today, int born_year, i
     age_days %= 365;
     age_days -= count_kabise(current_year, born_year, 0);
     monthes = age_days / 31;
-    days = age_days % 31 + 2;
+    days = age_days % 31 + 3;
     printf("%d Years & %d Monthes & %d Days.\n", years, monthes, days);
 }
 
-int year_jump(int year, int mode) { // to be used in shamsi convert mode=1 for miladi and mode=2 for gamari
+int year_jump(int year, int mode) { // to be used in shamsi convert mode = 1 for miladi and mode = 2 for gamari
     if (mode == 1) {
         return is_leap(year);
     } else {
@@ -155,7 +148,15 @@ int year_jump(int year, int mode) { // to be used in shamsi convert mode=1 for m
     }
 }
 
-void shamsi_to_convert(int year, int month, int day, int mode) {  // !! has to be cleaned !! mode=1 for miladi and mode=2 for gamari
+void menu();
+
+void back_to_menu() {
+    system("cls");
+    printf("Back to menu!\n-----------------------------\n");
+    return menu();
+}
+
+void shamsi_to_convert(int year, int month, int day, int mode) {  // mode = 1 for miladi and mode = 2 for gamari
     int origin_year = 1206, days_count, year_length, convert_year = 1827, month_name, month_len, monthes_count;
     int additional_days = 79, base_year_length = 365;
     int convert_month_len[2][12] = {{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}, {30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29}};
@@ -282,6 +283,7 @@ void conversion_menu() {
 
     } else if (option == 1 || option == 2) {
         system("cls");
+        printf("[0] Back to Menu\n-----------------------------\n");
         return conversion(option);
 
     } else {
@@ -294,7 +296,6 @@ void conversion_menu() {
 void conversion(int mode) {
     int year, month, day;
 
-    printf("[0] Back to Menu\n-----------------------------\n");
     printf("Please enter date in format y m d (example: 1369 7 19): ");
     
     scanf("%d", &year);
@@ -306,7 +307,8 @@ void conversion(int mode) {
 
     system("cls");
 
-    printf("%d %d %d --> ", year, month, day);
+    printf("%d %d %d", year, month, day);
+    printf(" " BG_WHITE TEXT_BLACK "==>" RESET_ALL " ");
     shamsi_to_convert(year, month, day, mode);
 
     printf("-----------------------------\n");
@@ -332,6 +334,7 @@ void menu() {
         age();
     } else if (choice == 3) {
         system("cls");
+        printf("[0] Back to Menu\n-----------------------------\n");
         conversion_menu();
     } else {
         system("cls");
